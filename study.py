@@ -15,7 +15,13 @@ import argparse
 import random
 import sys
 
-# (topic, question, [options], correct_index, explanation)
+# Each entry is (topic, question, options, correct_index, explanation).
+# I keep the bank as plain tuples in this one list because 15 questions
+# do not need a file format or a class. The field I have to watch is
+# correct_index: it points into the options list as written here,
+# before any shuffling, and run() translates it after the shuffle.
+# Every entry has exactly four options. A wrong index here would grade
+# every answer to that question wrong and no error would ever show.
 QUESTIONS = [
     ("foundations", "What is a pull request?",
      ["A request to delete a branch", "A proposal to merge changes from one branch into another",
@@ -72,6 +78,12 @@ QUESTIONS = [
      ["Discussions", "Issues", "Projects", "Gists"], 1,
      "Issues track bugs, tasks and feature requests; Projects organize them on boards."),
 ]
+# I derive the topic names from the bank itself instead of listing
+# them twice, so the --topic choices can never drift from the data.
+# The tradeoff is that a typo in one entry above would create a new
+# topic and argparse would accept it. The counts are uneven: 7
+# foundations, 6 actions, and only 2 copilot, so a copilot session
+# can never ask more than 2 questions whatever --count says.
 TOPICS = sorted({q[0] for q in QUESTIONS})
 
 
@@ -79,6 +91,12 @@ def run(questions):
     correct, missed = 0, []
     attempted = 0
     for i, (topic, question, options, answer, why) in enumerate(questions, 1):
+        # I shuffle a list of indexes, not the options themselves, so I
+        # can still find where the correct answer landed. right is the
+        # position of the bank's correct_index inside the shuffled
+        # order, and the grade below compares against right. Comparing
+        # against the original index would grade the shuffled display
+        # against the unshuffled bank and mark right answers wrong.
         order = list(range(len(options)))
         random.shuffle(order)
         shuffled = [options[j] for j in order]
@@ -86,12 +104,28 @@ def run(questions):
         print(f"\n[{topic}] Q{i}: {question}")
         for n, option in enumerate(shuffled, 1):
             print(f"  {n}. {option}")
+        # Only EOFError is caught here. Ctrl-C raises KeyboardInterrupt,
+        # which I measured passing straight out of run() uncaught. EOF
+        # is the early exit I support, because it can keep the answers
+        # already given and score only those.
         try:
             raw = input("Your answer (number): ").strip()
         except EOFError:
             print()
             break
+        # attempted goes up only after input returns, so an EOF on this
+        # question never counts it. That placement is what lets the
+        # score below divide by attempted instead of the planned count.
+        # An earlier version divided by the full count, so 1 correct
+        # answer out of 1 attempted and then leaving printed 50 percent.
         attempted += 1
+        # isdigit is the whole gate. A blank line, a decimal like 1.5,
+        # a negative number, and an out of range number all count as a
+        # wrong answer for this question, and I do not re-ask. The strip
+        # above means spaces around the number are fine. One hole I
+        # measured: the superscript two character passes isdigit but
+        # int() rejects it, so that input crashes with a ValueError
+        # instead of counting as wrong.
         if raw.isdigit() and int(raw) - 1 == right:
             correct += 1
             print("Correct!")
@@ -99,12 +133,19 @@ def run(questions):
             print(f"Not quite - the answer was {right + 1}. {options[answer]}")
             missed.append((question, why))
         print(f"Why: {why}")
+    # The score divides by attempted, never by len(questions). The
+    # early end note under it prints only when the two numbers differ,
+    # and the zero answers case gets its own line below instead of a
+    # division by zero or a fake 0 percent.
     if attempted:
         print(f"\nScore: {correct}/{attempted} ({correct / attempted:.0%})")
         if attempted < len(questions):
             print(f"Session ended early: {len(questions) - attempted} question(s) not answered.")
     else:
         print("\nNo questions answered.")
+    # The recap repeats the explanation, not the correct option text.
+    # The grade line already named the right answer at the moment of
+    # the miss, and the explanation is the part worth rereading.
     if missed:
         print("\nReview these in GUIDE.md:")
         for question, why in missed:
@@ -112,6 +153,11 @@ def run(questions):
     return 0
 
 
+# argparse runs this on the --count text. Raising ArgumentTypeError is
+# what makes argparse print the message and exit 2. Returning a clamped
+# value instead would silently change the session size, which is what
+# an earlier version did: max(1, count) turned --count 0 into a 1
+# question session with no word to the user.
 def positive_int(value):
     try:
         number = int(value)
@@ -127,13 +173,24 @@ def main(argv=None):
     parser.add_argument("--topic", choices=TOPICS, help="limit to one topic")
     parser.add_argument("--count", type=positive_int, default=10, help="number of questions")
     args = parser.parse_args(argv)
+    # The pool is a fresh list built from QUESTIONS, so shuffling it
+    # never reorders the bank itself. That matters when main() or run()
+    # is called more than once in one process, the way a test harness
+    # drives this file.
     pool = [q for q in QUESTIONS if not args.topic or q[0] == args.topic]
     random.shuffle(pool)
     selected = pool[:args.count]
+    # When the request is bigger than the pool I ask everything in the
+    # pool and say so before the first question. Without this note a
+    # --topic copilot --count 10 run looks like it lost 8 questions
+    # instead of never having them.
     if len(selected) < args.count:
         print(f"Only {len(selected)} question(s) available for this selection; asking all of them.")
     return run(selected)
 
 
+# main() returns the 0 that run() returns, so a finished session and
+# an early EOF exit both report success. The only nonzero exits in
+# this program are the argparse errors, which exit 2.
 if __name__ == "__main__":
     raise SystemExit(main())
