@@ -77,6 +77,7 @@ TOPICS = sorted({q[0] for q in QUESTIONS})
 
 def run(questions):
     correct, missed = 0, []
+    attempted = 0
     for i, (topic, question, options, answer, why) in enumerate(questions, 1):
         order = list(range(len(options)))
         random.shuffle(order)
@@ -90,6 +91,7 @@ def run(questions):
         except EOFError:
             print()
             break
+        attempted += 1
         if raw.isdigit() and int(raw) - 1 == right:
             correct += 1
             print("Correct!")
@@ -97,8 +99,12 @@ def run(questions):
             print(f"Not quite - the answer was {right + 1}. {options[answer]}")
             missed.append((question, why))
         print(f"Why: {why}")
-    total = len(questions)
-    print(f"\nScore: {correct}/{total} ({correct / total:.0%})" if total else "")
+    if attempted:
+        print(f"\nScore: {correct}/{attempted} ({correct / attempted:.0%})")
+        if attempted < len(questions):
+            print(f"Session ended early: {len(questions) - attempted} question(s) not answered.")
+    else:
+        print("\nNo questions answered.")
     if missed:
         print("\nReview these in GUIDE.md:")
         for question, why in missed:
@@ -106,14 +112,27 @@ def run(questions):
     return 0
 
 
+def positive_int(value):
+    try:
+        number = int(value)
+    except ValueError:
+        raise argparse.ArgumentTypeError(f"invalid int value: {value!r}")
+    if number < 1:
+        raise argparse.ArgumentTypeError("--count must be at least 1")
+    return number
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser(description="GitHub certification flashcard quiz.")
     parser.add_argument("--topic", choices=TOPICS, help="limit to one topic")
-    parser.add_argument("--count", type=int, default=10, help="number of questions")
+    parser.add_argument("--count", type=positive_int, default=10, help="number of questions")
     args = parser.parse_args(argv)
     pool = [q for q in QUESTIONS if not args.topic or q[0] == args.topic]
     random.shuffle(pool)
-    return run(pool[:max(1, args.count)])
+    selected = pool[:args.count]
+    if len(selected) < args.count:
+        print(f"Only {len(selected)} question(s) available for this selection; asking all of them.")
+    return run(selected)
 
 
 if __name__ == "__main__":
