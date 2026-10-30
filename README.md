@@ -1,6 +1,6 @@
-![Github Cert Study Guide banner](assets/banner.png)
+![Github Certification Study Guide banner](assets/banner.png)
 
-# Github-Cert-Study-Guide
+# GitHub-Certification-Study-Guide
 
 Study material for the GitHub certification exams: a written guide in
 `GUIDE.md` plus an interactive flashcard quiz in `study.py`.
