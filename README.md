@@ -34,15 +34,33 @@ Verified behavior:
   to review them in `GUIDE.md`.
 - Answers are entered as the option number. Any other input, including
   an out-of-range number or a blank line, counts as a wrong answer for
-  that question.
-- Closing input early (EOF, for example Ctrl-D) ends the session. The
-  score is reported out of the questions actually answered, with a note
-  saying how many were not answered; if none were answered it prints
-  `No questions answered.`
+  that question. That includes digit characters that look numeric but
+  do not convert to an integer, such as a superscript two: they count
+  as wrong instead of crashing the session, which is what happened
+  before.
+- Closing input early ends the session: EOF (for example Ctrl-D) and
+  Ctrl-C both work. The score is reported out of the questions
+  actually answered, with a note saying how many were not answered;
+  if none were answered it prints `No questions answered.`
+
+## Tests
+
+```bash
+python3 -m unittest
+```
+
+17 tests in `test_study.py`: the question bank itself (15 questions,
+7 foundations, 6 actions, 2 copilot, four options each, every correct
+index in range), `--count` parsing, grading (correct, wrong, blank,
+decimal, out of range, and the superscript two regression), early
+exits by EOF and Ctrl-C with the score counted over attempted
+questions only, the small pool note for `--topic copilot`, and the
+command line exit codes.
 
 ## Files
 
 - `study.py` - the interactive quiz.
+- `test_study.py` - the test suite.
 - `GUIDE.md` - the written study guide covering GitHub Foundations,
   GitHub Actions, and Muse, plus exam tips.
 - `assets/banner.png`, `assets/logo.png` - project branding.

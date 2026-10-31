@@ -104,13 +104,14 @@ def run(questions):
         print(f"\n[{topic}] Q{i}: {question}")
         for n, option in enumerate(shuffled, 1):
             print(f"  {n}. {option}")
-        # Only EOFError is caught here. Ctrl-C raises KeyboardInterrupt,
-        # which I measured passing straight out of run() uncaught. EOF
-        # is the early exit I support, because it can keep the answers
-        # already given and score only those.
+        # EOFError and KeyboardInterrupt are both caught here. EOF is
+        # Ctrl-D or a closed input stream; Ctrl-C used to pass straight
+        # out of run() as a traceback. Both end the session the same
+        # way, keeping the answers already given and scoring only
+        # those, because leaving a quiz should not need a crash.
         try:
             raw = input("Your answer (number): ").strip()
-        except EOFError:
+        except (EOFError, KeyboardInterrupt):
             print()
             break
         # attempted goes up only after input returns, so an EOF on this
@@ -119,14 +120,23 @@ def run(questions):
         # An earlier version divided by the full count, so 1 correct
         # answer out of 1 attempted and then leaving printed 50 percent.
         attempted += 1
-        # isdigit is the whole gate. A blank line, a decimal like 1.5,
-        # a negative number, and an out of range number all count as a
-        # wrong answer for this question, and I do not re-ask. The strip
-        # above means spaces around the number are fine. One hole I
-        # measured: the superscript two character passes isdigit but
-        # int() rejects it, so that input crashes with a ValueError
-        # instead of counting as wrong.
-        if raw.isdigit() and int(raw) - 1 == right:
+        # isdigit is the first gate, and int() runs in a try behind
+        # it. A blank line, a decimal like 1.5, a negative number, and
+        # an out of range number all count as a wrong answer for this
+        # question, and I do not re-ask. The strip above means spaces
+        # around the number are fine. The try matters because isdigit
+        # and int() disagree about some characters: a superscript two
+        # passes isdigit but int() rejects it, and that input used to
+        # crash with a ValueError instead of counting as wrong. Now
+        # any digit string int() cannot convert lands in the same
+        # wrong answer path as every other bad input.
+        choice = None
+        if raw.isdigit():
+            try:
+                choice = int(raw)
+            except ValueError:
+                choice = None
+        if choice is not None and choice - 1 == right:
             correct += 1
             print("Correct!")
         else:
@@ -190,7 +200,7 @@ def main(argv=None):
 
 
 # main() returns the 0 that run() returns, so a finished session and
-# an early EOF exit both report success. The only nonzero exits in
-# this program are the argparse errors, which exit 2.
+# an early exit by EOF or Ctrl-C both report success. The only
+# nonzero exits in this program are the argparse errors, which exit 2.
 if __name__ == "__main__":
     raise SystemExit(main())
