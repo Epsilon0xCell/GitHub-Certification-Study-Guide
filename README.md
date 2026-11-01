@@ -1,13 +1,25 @@
+![Intro banner](intro-banner.png)
+
 ![Github Certification Study Guide banner](assets/banner.png)
+
+![Animated scene](scene.svg)
 
 # GitHub-Certification-Study-Guide
 
 Study material for the GitHub certification exams: a written guide in
 `GUIDE.md` plus an interactive flashcard quiz in `study.py`.
 
+![Heading plate](plate.svg)
+
+![Major separator](separator-major.svg)
+
 ## Requirements
 
 - Python 3, standard library only.
+
+![Heading plate](plate.svg)
+
+![Major separator](separator-major.svg)
 
 ## Running the quiz
 
@@ -43,6 +55,10 @@ Verified behavior:
   actually answered, with a note saying how many were not answered;
   if none were answered it prints `No questions answered.`
 
+![Heading plate](plate.svg)
+
+![Major separator](separator-major.svg)
+
 ## Tests
 
 ```bash
@@ -57,6 +73,10 @@ exits by EOF and Ctrl-C with the score counted over attempted
 questions only, the small pool note for `--topic copilot`, and the
 command line exit codes.
 
+![Heading plate](plate.svg)
+
+![Major separator](separator-major.svg)
+
 ## Files
 
 - `study.py` - the interactive quiz.
@@ -65,3 +85,9 @@ command line exit codes.
   GitHub Actions, and Muse, plus exam tips.
 - `assets/banner.png`, `assets/logo.png` - project branding.
 - `LICENSE` - GPL-3.0.
+
+![Minor separator](separator-minor.svg)
+
+> Museum label, pinned under this panel: a bad topic or a bad count exits with status 2.
+> Museum label: copilot holds only 2 questions, so a longer request prints how many exist and asks all of them.
+> Museum label: a superscript two counts as a wrong answer instead of crashing the sitting.

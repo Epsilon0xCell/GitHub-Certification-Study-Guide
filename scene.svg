@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 340">
+<rect width="1200" height="110" fill="#b9c8b4"/>
+<g stroke="#8a9a90" stroke-width="5" opacity="0.5"><animate attributeName="opacity" values="0.5;0.15;0.5" dur="9s" repeatCount="indefinite"/><line x1="820" y1="6" x2="790" y2="104"/><line x1="870" y1="6" x2="840" y2="104"/><line x1="920" y1="6" x2="890" y2="104"/></g>
+<rect y="86" width="1200" height="16" fill="#b4beb8"><animate attributeName="opacity" values="1;0.55;1" dur="7s" repeatCount="indefinite"/></rect>
+<rect y="102" width="1200" height="38" fill="#5f7d3e"/>
+<g fill="#2f4d2a"><ellipse cx="140" cy="98" rx="52" ry="12"/><ellipse cx="1020" cy="96" rx="58" ry="13"/></g>
+<rect y="140" width="1200" height="200" fill="#a06a3e"/>
+<g stroke="#466e8c" stroke-width="3" fill="none"><path d="M60 196 q30 -8 60 0 t60 0 t60 0 t60 0"/></g>
+<g fill="#efe8d6"><g><animateTransform attributeName="transform" type="translate" values="0 0;26 0;0 0" dur="6s" repeatCount="indefinite"/><ellipse cx="130" cy="182" rx="9" ry="6"/><rect x="136" y="179" width="42" height="6"/></g><g><animateTransform attributeName="transform" type="translate" values="26 0;0 0;26 0" dur="6s" repeatCount="indefinite"/><ellipse cx="240" cy="180" rx="9" ry="6"/><rect x="246" y="177" width="42" height="6"/></g></g>
+<g fill="#c8a878"><g><animateTransform attributeName="transform" type="rotate" values="0 430 218;7 430 218;0 430 218" dur="5s" repeatCount="indefinite"/><ellipse cx="400" cy="212" rx="34" ry="15"/><ellipse cx="430" cy="206" rx="11" ry="8"/></g><ellipse cx="520" cy="214" rx="34" ry="15"/><ellipse cx="550" cy="208" rx="11" ry="8"/></g>
+<g><animateTransform attributeName="transform" type="rotate" values="-3 880 250;3 880 250;-3 880 250" dur="11s" repeatCount="indefinite"/><polygon points="830,268 905,262 918,282 908,300 842,302 828,284" fill="#b83c24"/><polygon points="892,266 940,168 958,174 922,270" fill="#b83c24"/><polygon points="940,168 982,158 986,172 956,182" fill="#b83c24"/><circle cx="972" cy="164" r="4" fill="#265c8a"/></g>
+<g fill="#d8b285"><polygon points="700,318 714,322 706,330"><animate attributeName="opacity" values="0;1;0" dur="4s" repeatCount="indefinite"/></polygon><polygon points="760,324 774,328 766,336"><animate attributeName="opacity" values="0;0;1;0" dur="5s" begin="1s" repeatCount="indefinite"/></polygon></g>
+<g fill="#b03024"><animate attributeName="opacity" values="0.65;1;0.65" dur="8s" repeatCount="indefinite"/><ellipse cx="330" cy="262" rx="13" ry="15"/><rect x="318" y="232" width="4" height="18"/><rect x="326" y="228" width="4" height="20"/><rect x="334" y="230" width="4" height="18"/><rect x="342" y="234" width="4" height="15"/></g>
+<rect x="640" y="308" width="42" height="9" fill="#5a4028"><animateTransform attributeName="transform" type="rotate" values="0 661 312;4 661 312;0 661 312" dur="7s" repeatCount="indefinite"/></rect>
+</svg>
