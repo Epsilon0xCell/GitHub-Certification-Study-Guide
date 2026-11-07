@@ -1,10 +1,12 @@
-![Intro banner](intro-banner.png)
+![Intro: a close view of one question card being flipped over to reveal a plain coral answer panel, the pencil tapping it, other cards waiting in a neat pile, in flat 1950s educational filmstrip illustration on classroom cream and chalk green](intro-banner.png)
 
-![Github Certification Study Guide banner](assets/banner.png)
+![Github Certification Study Guide banner: a classroom desk in flat 1950s educational filmstrip illustration, a written guide booklet open on the left, a fan of question cards in the middle each with a plain tick or cross shape, and a small finish flag on the right, chalk green, coral and navy on cream](assets/banner.png)
 
 ![Animated scene](scene.svg)
 
 # GitHub-Certification-Study-Guide
+
+<p align="center"><img src="logo.png" alt="GitHub-Certification-Study-Guide logo: a neat stack of study flashcards on classroom cream in flat 1950s filmstrip illustration, the top card showing a plain coral red check mark shape, a pencil resting beside them, chalk green border band" width="200"></p>
 
 Study material for the GitHub certification exams: a written guide in
 `GUIDE.md` plus an interactive flashcard quiz in `study.py`.
