@@ -9,7 +9,7 @@
 <p align="center"><img src="logo.png" alt="GitHub-Certification-Study-Guide logo: a neat stack of study flashcards on classroom cream in flat 1950s filmstrip illustration, the top card showing a plain coral red check mark shape, a pencil resting beside them, chalk green border band" width="200"></p>
 
 Study material for the GitHub certification exams: a written guide in
-`GUIDE.md` plus an interactive flashcard quiz in `study.py`.
+[GUIDE.md](./GUIDE.md) plus an interactive flashcard quiz in `study.py`.
 
 ![Heading plate](plate.svg)
 
